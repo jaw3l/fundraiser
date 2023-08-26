@@ -22,27 +22,68 @@ contract Fundraiser is Pausable, AccessControl, Ownable {
     Counters.Counter private donationCount;
     bytes32 public constant MODERATOR = keccak256("MODERATOR");
     bytes32 public constant BENEFICIARY = keccak256("BENEFICIARY");
-    bytes32 public constant CREATOR = keccak256("CREATOR");
 
+    // Constructor
     constructor(
         string memory _title,
         string memory _description,
         string memory _image,
         uint _donationGoal,
-        address payable _beneficiary,
-        address _creator
+        address _factoryOwner,
+        address _creator,
+        address payable _beneficiary
     ) {
         title = _title;
         description = _description;
         image = _image;
         donationGoal = _donationGoal;
+        factoryOwner = _factoryOwner;
         beneficiary = _beneficiary;
-        factoryOwner = msg.sender;
-        _setupRole(MODERATOR, msg.sender);
+        _setupRole(MODERATOR, _factoryOwner);
         _setupRole(BENEFICIARY, _beneficiary);
-        _setupRole(CREATOR, _creator);
+        _transferOwnership(_creator);
     }
 
+
+    // Modifiers
+
+    modifier onlyPrivileged {
+        require(
+            hasRole(MODERATOR, msg.sender) ||
+            hasRole(BENEFICIARY, msg.sender) ||
+            msg.sender == owner(),
+            "Caller is not privileged"
+        );
+        _;
+    }
+
+    // Functions - Setter Functions
+    
+    function updateTitle(string memory _title) public onlyPrivileged {
+        title = _title;
+    }
+
+    function updateDescription(string memory _description) public onlyPrivileged {
+        description = _description;
+    }
+
+    function updateImage(string memory _image) public onlyPrivileged {
+        image = _image;
+    }
+
+    function updateDonationGoal(uint _donationGoal) public onlyPrivileged {
+        donationGoal = _donationGoal;
+    }
+
+    function updateBeneficiary(address payable _beneficiary) public onlyPrivileged {
+        beneficiary = _beneficiary;
+    }
+
+    // Functions - Getter Functions
+
+    function getDonationCount() public view returns (uint) {
+        return donationCount.current();
+    }
 
     // Functions - Core Functions
 
