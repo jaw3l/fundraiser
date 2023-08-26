@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
 pragma solidity 0.8.21;
 
+
+import "hardhat/console.sol";
 // Counter - Used to generate unique IDs for each fundraiser.
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -44,26 +46,42 @@ contract Fundraiser is Pausable, AccessControl, Ownable {
         _transferOwnership(_creator);
     }
 
+    // Structs
+
+    struct Donation {
+        uint amount;
+        uint donatedAt;
+    }
+
+    // Mappings
+
+    mapping(address => Donation[]) public _donations;
+
+    // Events
+
+    event DonationReceived(address indexed donor, uint amount);
 
     // Modifiers
 
-    modifier onlyPrivileged {
+    modifier onlyPrivileged() {
         require(
             hasRole(MODERATOR, msg.sender) ||
-            hasRole(BENEFICIARY, msg.sender) ||
-            msg.sender == owner(),
+                hasRole(BENEFICIARY, msg.sender) ||
+                msg.sender == owner(),
             "Caller is not privileged"
         );
         _;
     }
 
     // Functions - Setter Functions
-    
+
     function updateTitle(string memory _title) public onlyPrivileged {
         title = _title;
     }
 
-    function updateDescription(string memory _description) public onlyPrivileged {
+    function updateDescription(
+        string memory _description
+    ) public onlyPrivileged {
         description = _description;
     }
 
@@ -75,7 +93,9 @@ contract Fundraiser is Pausable, AccessControl, Ownable {
         donationGoal = _donationGoal;
     }
 
-    function updateBeneficiary(address payable _beneficiary) public onlyPrivileged {
+    function updateBeneficiary(
+        address payable _beneficiary
+    ) public onlyPrivileged {
         beneficiary = _beneficiary;
     }
 
