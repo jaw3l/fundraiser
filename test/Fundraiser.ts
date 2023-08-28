@@ -56,4 +56,52 @@ describe("Fundraiser", function () {
             expect(await fundraiser.image()).to.equal(fundraiserImage);
         });
 
+        it("Should set the right description", async function () {
+            const { fundraiser } = await loadFixture(deployContractFixture);
+            expect(await fundraiser.description()).to.equal(fundraiserDescription);
+        });
+
+        it("Should set the right funding goal", async function () {
+            const { fundraiser } = await loadFixture(deployContractFixture);
+            expect(await fundraiser.donationGoal()).to.equal(fundingGoal);
+        });
+    });
+
+    describe("Manage Fundraiser", function () {
+        it("Should update the beneficiary", async function () {
+            const { factoryOwner, beneficiary, fundraiser } = await loadFixture(deployContractFixture);
+            const newBeneficiary = factoryOwner.address;
+            // Since beneficiary is "Priveleged" it should be able to update the beneficiary
+            await fundraiser.connect(beneficiary).updateBeneficiary(newBeneficiary);
+            expect(await fundraiser.beneficiary()).to.equal(newBeneficiary);
+        });
+
+        it("Should update the title", async function () {
+            const { factoryOwner, fundraiser } = await loadFixture(deployContractFixture);
+            const newTitle = "New Title";
+            await fundraiser.connect(factoryOwner).updateTitle(newTitle);
+            expect(await fundraiser.title()).to.equal(newTitle);
+        });
+
+        it("Should update the image", async function () {
+            const { factoryOwner, fundraiser } = await loadFixture(deployContractFixture);
+            const newImage = "New Image";
+            await fundraiser.connect(factoryOwner).updateImage(newImage);
+            expect(await fundraiser.image()).to.equal(newImage);
+        });
+
+        it("Should update the description", async function () {
+            const { factoryOwner, fundraiser } = await loadFixture(deployContractFixture);
+            const newDescription = "New Description";
+            await fundraiser.connect(factoryOwner).updateDescription(newDescription);
+            expect(await fundraiser.description()).to.equal(newDescription);
+        });
+
+        it("Should update the donation goal", async function () {
+            const { factoryOwner, fundraiser } = await loadFixture(deployContractFixture);
+            const newGoal = "200";
+            await fundraiser.connect(factoryOwner).updateDonationGoal(newGoal);
+            expect(await fundraiser.donationGoal()).to.equal(newGoal);
+        });
+    });
 });
