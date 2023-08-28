@@ -28,16 +28,16 @@ contract Fundraiser is Pausable, AccessControl, Ownable {
     // Constructor
     constructor(
         string memory _title,
-        string memory _description,
         string memory _image,
+        string memory _description,
         uint _donationGoal,
         address _factoryOwner,
         address _creator,
         address payable _beneficiary
     ) {
         title = _title;
-        description = _description;
         image = _image;
+        description = _description;
         donationGoal = _donationGoal;
         factoryOwner = _factoryOwner;
         beneficiary = _beneficiary;
