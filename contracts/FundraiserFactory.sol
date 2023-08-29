@@ -25,7 +25,7 @@ contract FundraiserFactory {
 
     // Functions
 
-    function generateFundraiser(
+    function createFundraiser(
         string memory _title,
         string memory _description,
         string memory _image,
@@ -52,6 +52,18 @@ contract FundraiserFactory {
     }
 
     // Functions - Getter Functions
+
+    function getFundraisersInRange(uint startIndex, uint endIndex) public view returns (Fundraiser[] memory) {
+        Fundraiser[] memory fundraisersInRange = new Fundraiser[](endIndex - startIndex);
+        for (uint i = startIndex; i < endIndex; i++) {
+            fundraisersInRange[i - startIndex] = _fundraisers[i];
+        }
+        return fundraisersInRange;
+    }
+
+    function getFundraiser(uint index) public view returns (Fundraiser) {
+        return _fundraisers[index];
+    }
 
     function getFundraisersCount() public view returns (uint) {
         return _fundraiserCount.current();

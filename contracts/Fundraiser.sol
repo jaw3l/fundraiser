@@ -73,6 +73,25 @@ contract Fundraiser is Pausable, AccessControl, Ownable {
         _;
     }
 
+    // Functions
+
+    function donate() public payable whenNotPaused {
+        require(msg.value > 0, "Donation must be greater than 0");
+        require(
+            donationCount.current() < donationGoal,
+            "Donation goal has been reached"
+        );
+        donationCount.increment();
+        totalTokenDonated = totalTokenDonated.add(msg.value);
+        Donation memory donation = Donation({
+            amount: msg.value,
+            donatedAt: block.timestamp
+        });
+        _donations[msg.sender].push(donation);
+        emit DonationReceived(msg.sender, msg.value);
+    }
+
+
     // Functions - Setter Functions
 
     function updateTitle(string memory _title) public onlyPrivileged {

@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
-import { time, loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import "@nomicfoundation/hardhat-chai-matchers";
 
 describe("Fundraiser", function () {
@@ -102,6 +102,12 @@ describe("Fundraiser", function () {
             const newGoal = "200";
             await fundraiser.connect(factoryOwner).updateDonationGoal(newGoal);
             expect(await fundraiser.donationGoal()).to.equal(newGoal);
+        });
+    });
+
+    describe("Donations", function () {
+        it("Should send the donation to the beneficiary", async function () {
+            const { fundraiser } = await loadFixture(deployContractFixture);
         });
     });
 });
