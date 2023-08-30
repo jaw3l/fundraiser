@@ -33,7 +33,7 @@ describe("FundraiserFactory", function () {
     describe("Fundraiser Creation", function () {
 
         it("Should create a fundraiser", async function () {
-            const { factoryOwner, creator, beneficiary, contract } = await loadFixture(deployContractFixture);
+            const { beneficiary, contract } = await loadFixture(deployContractFixture);
             await contract.createFundraiser(
                 fundraiserName,
                 fundraiserImage,
