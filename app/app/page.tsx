@@ -5,6 +5,7 @@ import theme from '@/theme/themeConfig'
 const Home = () => (
   <ConfigProvider theme={theme}>
     <div className="App">
+      <
     </div>
   </ConfigProvider>
 )
